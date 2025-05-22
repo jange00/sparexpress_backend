@@ -2,6 +2,9 @@ const express = require("express")
 const router = express.Router()
 
 const {createUser,getUser, getOneUser,updateOneUser, deleteOneUser} = require("../../controllers/admin/userManagementController")
+const { authenticateUser, isAdmin } = require("../../middlewares/authorizedUser")
+
+
 
 router.post(
     "/create",
@@ -10,6 +13,8 @@ router.post(
 
 router.get(
     "/",
+    authenticateUser,
+    isAdmin,
     getUser
 )
 

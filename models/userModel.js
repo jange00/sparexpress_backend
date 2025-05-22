@@ -20,6 +20,10 @@ const UserSchema = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
+        },
+        role : {
+            type: String,
+            default: "normal"
         }
     },
     {

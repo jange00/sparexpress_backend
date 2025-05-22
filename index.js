@@ -9,6 +9,7 @@ const app = express()
 // Routes
 const userRoute = require("./routes/userRoutes")
 const adminUserRoute = require("./routes/admin/adminUserRoute")
+const productRoute = require("./routes/product/productRoutes")
 
 // Connect to DB
 connectDB()
@@ -19,6 +20,7 @@ app.use(express.json())
 // implement routes here
 app.use("/api/auth",userRoute)
 app.use("/api/admin/user", adminUserRoute)
+app.use("/api/products", productRoute)
 
 // Start server
 const PORT = process.env.PORT
