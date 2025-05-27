@@ -2,56 +2,48 @@ const mongoose = require("mongoose")
 
 const orderSchema = new mongoose.Schema(
     {
-        // user: {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: "User",
-        //     required: true
-        // },
-
-        
-        
-        customer: {
-            fullname: { type: String, required: true },
-            email: { type: String, required: true },
-            phoneNumber: { type: String, required: true }
-          },
-        date: {
-            type: Date,
-            default: Date.now
-        },
-        total: Number,
-        status: {
-            type: String,
-            enum: [
-                "pending",
-                "processing",
-                "shipped",
-                "delivered",
-                "canceled"
-            ]
-        },
-        paymentMethod: {
-            type: String,
-            enum: ["credit-card", "paypal", "bank-transfer", "cash-on-delivery"],
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
             required: true
-          },
-        paymentStatus: { type: String, enum: ["paid", "unpaid", "refunded"] },
+        },
+        Amount: {
+            type: Number,
+            required: true,
+            min: 0
+        },
+        shippingAddressId:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "ShippingAddress",
+            required: true
+        },
+        paymentId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Payment",
+            required: true
+        },
         items: [
             {
-                id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' }, // Reference to Product
-                name: String,
-                price: Number,
-                quantity: Number,
-                total: Number
+                productId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'Product',
+                    required: true
+                },
+                quantity: {
+                    type: Number,
+                    required: true,
+                    min: 1
+                },
+                total: {
+                    type: Number,
+                    required: true,
+                    min: 0
+                }
             }
-        ],
-        shipping: {
-            address: String,
-            courier: String,
-            trackingId: String,
-            estimatedDeliver: String
-        },
-        notes: String,
+        ]
+    },
+    {
+        timestamps: true // Optional, but good for tracking
     }
 )
 

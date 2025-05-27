@@ -9,8 +9,8 @@ const app = express()
 // Routes
 const userRoute = require("./routes/userRoutes")
 const adminUserRoute = require("./routes/admin/adminUserRoute")
-const productRoute = require("./routes/product/productRoutes")
-const orderRoute = require("./routes/order/orderRoutes")
+const productRoute = require("./routes/admin/productRoutes")
+const orderRoute = require("./routes/admin/orderRoutes")
 
 // Connect to DB
 connectDB()

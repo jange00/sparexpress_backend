@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const {createProduct, getProducts, getProductsById, updateProduct, deleteProduct} = require("../../controllers/product/productController")
+const {createProduct, getProducts, getProductsById, updateProduct, deleteProduct} = require("../../controllers/admin/productController")
 
 router.post(
     "/",
