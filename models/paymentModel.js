@@ -29,10 +29,7 @@ const paymentSchema = new mongoose.Schema(
             enum: ["Pending", "Completed", "Failed", "Refunded"],
             default: "Pending"
         },
-        // paymentDate: {
-        //     type: Date,
-        //     default: Date.now
-        // }
+
     },
     {
         timestamps: true 
