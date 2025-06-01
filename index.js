@@ -14,7 +14,9 @@ const orderRoutes = require('./routes/orderRoutes')
 const brandRoutes = require("./routes/brandRoutes")
 const categoryRoutes = require("./routes/categoryRoutes")
 const paymentRoutes = require("./routes/paymentRoutes")
-const ratingRouter = require("./routes/ratingRoutes")
+const ratingRoutes = require("./routes/ratingRoutes")
+const shippingAddressRoutes = require("./routes/shippingAddressRoutes")
+const specificationRouter = require("./routes/specificationRoutes")
 
 // Connect to DB
 connectDB()
@@ -30,7 +32,9 @@ app.use("/api/brands", brandRoutes)
 app.use("/api/categories", categoryRoutes)
 app.use("/api/orders", orderRoutes)
 app.use("/api/payments", paymentRoutes)
-app.use("/api/ratings", ratingRouter)
+app.use("/api/ratings", ratingRoutes)
+app.use("/api/shipping-address", shippingAddressRoutes)
+app.use("/api/specifications", specificationRouter)
 
 // Start server
 const PORT = process.env.PORT

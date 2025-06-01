@@ -4,17 +4,25 @@ const Payment = require("../models/paymentModel");
 // Create a new payment 
 exports.createPayment = async (req, res) => {
     try {
-        const { userId, orderId, amount, paymentMethod, status } = req.body;
+        const { orderId, amount, paymentMethod, status  } = req.body;
+        userId=req.user._id;
 
         // Basic validation
-        if (!userId || !orderId || !amount || !paymentMethod) {
+        if ( !orderId || !amount || !paymentMethod || isNaN(Number(amount))) {
             return res.status(400).json({
                 success: false,
-                message: "Missing required fields"
+                message: "Missing or invalid required fields"
             });
         }
 
-        const newPayment = new Payment({ userId, orderId, amount, paymentMethod, status });
+        const newPayment = new Payment({
+            userId,
+            orderId,
+            amount: Number(amount),
+            paymentMethod,
+            status
+        });
+
         await newPayment.save();
 
         return res.status(201).json({
@@ -27,7 +35,7 @@ exports.createPayment = async (req, res) => {
         console.error("Create payment error:", err);
         return res.status(500).json({
             success: false,
-            message: "Failed to create payment"
+            message: "Server error while creating payment"
         });
     }
 };
@@ -49,7 +57,7 @@ exports.getAllPayments = async (req, res) => {
         console.error("Get all payments error:", err);
         return res.status(500).json({
             success: false,
-            message: "Failed to fetch payments"
+            message: "Server error while fetching payments"
         });
     }
 };
@@ -87,7 +95,7 @@ exports.getPaymentById = async (req, res) => {
         console.error("Get payment by ID error:", err);
         return res.status(500).json({
             success: false,
-            message: "Failed to fetch payment"
+            message: "Server error while fetching payment"
         });
     }
 };
@@ -101,6 +109,13 @@ exports.updatePayment = async (req, res) => {
             return res.status(400).json({
                 success: false,
                 message: "Invalid payment ID"
+            });
+        }
+
+        if (!req.body || Object.keys(req.body).length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "No update data provided"
             });
         }
 
@@ -127,7 +142,7 @@ exports.updatePayment = async (req, res) => {
         console.error("Update payment error:", err);
         return res.status(500).json({
             success: false,
-            message: "Failed to update payment"
+            message: "Server error while updating payment"
         });
     }
 };
@@ -162,7 +177,7 @@ exports.deletePayment = async (req, res) => {
         console.error("Delete payment error:", err);
         return res.status(500).json({
             success: false,
-            message: "Failed to delete payment"
+            message: "Server error while deleting payment"
         });
     }
 };

@@ -1,20 +1,23 @@
 const mongoose = require("mongoose");
 const Category = require("../models/categoryModel");
 
+// Helper function to validate ObjectId
+const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+
 // Create a new category
 exports.createCategory = async (req, res) => {
     try {
-        const { title } = req.body;
+        const title = req.body.title?.trim();
 
         // Validation
-        if (!title || title.trim() === "") {
+        if (!title) {
             return res.status(400).json({
                 success: false,
                 message: "Title is required"
             });
         }
 
-        const newCategory = new Category({ title: title.trim() });
+        const newCategory = new Category({ title });
         await newCategory.save();
 
         return res.status(201).json({
@@ -24,7 +27,7 @@ exports.createCategory = async (req, res) => {
         });
 
     } catch (err) {
-        console.error(err);
+        console.error("Error in createCategory:", err);
         return res.status(500).json({
             success: false,
             message: "Server error"
@@ -42,7 +45,7 @@ exports.getAllCategories = async (req, res) => {
             data: categories
         });
     } catch (err) {
-        console.error(err);
+        console.error("Error in getAllCategories:", err);
         return res.status(500).json({
             success: false,
             message: "Server error"
@@ -55,8 +58,7 @@ exports.getCategoryById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Validate MongoDB ObjectId
-        if (!mongoose.Types.ObjectId.isValid(id)) {
+        if (!isValidObjectId(id)) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid category ID"
@@ -78,7 +80,7 @@ exports.getCategoryById = async (req, res) => {
         });
 
     } catch (err) {
-        console.error(err);
+        console.error("Error in getCategoryById:", err);
         return res.status(500).json({
             success: false,
             message: "Server error"
@@ -90,28 +92,29 @@ exports.getCategoryById = async (req, res) => {
 exports.updateCategory = async (req, res) => {
     try {
         const { id } = req.params;
+        const title = req.body.title?.trim();
 
-        if (!mongoose.Types.ObjectId.isValid(id)) {
+        if (!isValidObjectId(id)) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid category ID"
             });
         }
 
-        if (!req.body.title || req.body.title.trim() === "") {
+        if (!title) {
             return res.status(400).json({
                 success: false,
                 message: "Title is required for update"
             });
         }
 
-        const updateCategory = await Category.findByIdAndUpdate(
+        const updatedCategory = await Category.findByIdAndUpdate(
             id,
-            { $set: { title: req.body.title.trim() } },
+            { $set: { title } },
             { new: true }
         );
 
-        if (!updateCategory) {
+        if (!updatedCategory) {
             return res.status(404).json({
                 success: false,
                 message: "Category not found"
@@ -121,11 +124,11 @@ exports.updateCategory = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Category updated successfully",
-            data: updateCategory
+            data: updatedCategory
         });
 
     } catch (err) {
-        console.error(err);
+        console.error("Error in updateCategory:", err);
         return res.status(500).json({
             success: false,
             message: "Server error"
@@ -138,15 +141,15 @@ exports.deleteCategory = async (req, res) => {
     try {
         const { id } = req.params;
 
-        if (!mongoose.Types.ObjectId.isValid(id)) {
+        if (!isValidObjectId(id)) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid category ID"
             });
         }
 
-        const category = await Category.findByIdAndDelete(id);
-        if (!category) {
+        const deletedCategory = await Category.findByIdAndDelete(id);
+        if (!deletedCategory) {
             return res.status(404).json({
                 success: false,
                 message: "Category not found"
@@ -159,7 +162,7 @@ exports.deleteCategory = async (req, res) => {
         });
 
     } catch (err) {
-        console.error(err);
+        console.error("Error in deleteCategory:", err);
         return res.status(500).json({
             success: false,
             message: "Server error"

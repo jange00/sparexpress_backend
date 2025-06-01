@@ -4,10 +4,19 @@ const Order = require("../models/orderModel");
 // Create a new order
 exports.createOrder = async (req, res) => {
     try {
-        const { userId, Amount, shippingAddressId, paymentId, items } = req.body;
+        const {Amount, shippingAddressId, paymentId, items } = req.body;
+        const amount = Number(Amount);
+        userId=req.user._id;
 
         // Validate required fields
-        if (!userId || !Amount || !shippingAddressId || !paymentId || !items || !Array.isArray(items) || items.length === 0) {
+        if (
+            !shippingAddressId ||
+            !paymentId ||
+            !items ||
+            !Array.isArray(items) ||
+            items.length === 0 ||
+            isNaN(amount)
+        ) {
             return res.status(400).json({
                 success: false,
                 message: "Missing or invalid order data"
@@ -16,13 +25,14 @@ exports.createOrder = async (req, res) => {
 
         const newOrder = new Order({
             userId,
-            Amount,
+            Amount: amount,
             shippingAddressId,
             paymentId,
             items
         });
 
         await newOrder.save();
+
         return res.status(201).json({
             success: true,
             message: "Order created successfully",
@@ -114,6 +124,13 @@ exports.updateOrder = async (req, res) => {
             });
         }
 
+        if (!req.body || Object.keys(req.body).length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "No update data provided"
+            });
+        }
+
         const updatedOrder = await Order.findByIdAndUpdate(
             id,
             { $set: req.body },
@@ -155,6 +172,7 @@ exports.deleteOrder = async (req, res) => {
         }
 
         const deletedOrder = await Order.findByIdAndDelete(id);
+
         if (!deletedOrder) {
             return res.status(404).json({
                 success: false,

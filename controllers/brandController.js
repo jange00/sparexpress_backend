@@ -4,19 +4,20 @@ const Brand = require("../models/brandModel");
 // Create a new brand
 exports.createBrand = async (req, res) => {
     try {
-        const { title, count, model } = req.body;
+        const title = req.body.title?.trim();
+        const model = req.body.model?.trim();
+        const count = Number(req.body.count);
 
-        // Basic validation
-        if (!title || !count || !model) {
+        if (!title || !model || isNaN(count)) {
             return res.status(400).json({
                 success: false,
-                message: "All fields (title, count, model) are required"
+                message: "All fields (title, count, model) are required and valid"
             });
         }
 
         const newBrand = new Brand({
             title,
-            count: Number(count),
+            count,
             model
         });
 
@@ -29,7 +30,7 @@ exports.createBrand = async (req, res) => {
         });
 
     } catch (err) {
-        console.error(err);
+        console.error("Error in createBrand:", err);
         return res.status(500).json({
             success: false,
             message: "Server error"
@@ -47,7 +48,7 @@ exports.getAllBrands = async (req, res) => {
             data: brands
         });
     } catch (err) {
-        console.error(err);
+        console.error("Error in getAllBrands:", err);
         return res.status(500).json({
             success: false,
             message: "Server error"
@@ -60,7 +61,6 @@ exports.getBrandById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Validate MongoDB ID
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({
                 success: false,
@@ -83,7 +83,7 @@ exports.getBrandById = async (req, res) => {
         });
 
     } catch (err) {
-        console.error(err);
+        console.error("Error in getBrandById:", err);
         return res.status(500).json({
             success: false,
             message: "Server error"
@@ -110,13 +110,13 @@ exports.updateBrand = async (req, res) => {
             });
         }
 
-        const updateBrand = await Brand.findByIdAndUpdate(
+        const updatedBrand = await Brand.findByIdAndUpdate(
             id,
             { $set: req.body },
             { new: true }
         );
 
-        if (!updateBrand) {
+        if (!updatedBrand) {
             return res.status(404).json({
                 success: false,
                 message: "Brand not found"
@@ -126,11 +126,11 @@ exports.updateBrand = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Brand updated successfully",
-            data: updateBrand
+            data: updatedBrand
         });
 
     } catch (err) {
-        console.error(err);
+        console.error("Error in updateBrand:", err);
         return res.status(500).json({
             success: false,
             message: "Server error"
@@ -165,7 +165,7 @@ exports.deleteBrand = async (req, res) => {
         });
 
     } catch (err) {
-        console.error(err);
+        console.error("Error in deleteBrand:", err);
         return res.status(500).json({
             success: false,
             message: "Server error"
