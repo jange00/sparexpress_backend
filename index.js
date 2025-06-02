@@ -17,6 +17,8 @@ const paymentRoutes = require("./routes/paymentRoutes")
 const ratingRoutes = require("./routes/ratingRoutes")
 const shippingAddressRoutes = require("./routes/shippingAddressRoutes")
 const specificationRouter = require("./routes/specificationRoutes")
+const subCategoryRoutes = require("./routes/subCategoryRoutes")
+const wishlistRoutes = require("./routes/wishlistRoutes")
 
 // Connect to DB
 connectDB()
@@ -35,6 +37,8 @@ app.use("/api/payments", paymentRoutes)
 app.use("/api/ratings", ratingRoutes)
 app.use("/api/shipping-address", shippingAddressRoutes)
 app.use("/api/specifications", specificationRouter)
+app.use("/api/subcategories", subCategoryRoutes)
+app.use("/apt/wishlist", wishlistRoutes)
 
 // Start server
 const PORT = process.env.PORT
