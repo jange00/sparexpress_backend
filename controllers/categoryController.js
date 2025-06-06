@@ -7,7 +7,11 @@ const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 // Create a new category
 exports.createCategory = async (req, res) => {
     try {
-        const title = req.body.title?.trim();
+        // const filepath = req.file?.path;
+        // console.log(req.file)
+        // console.log(req.body)
+        const title = req.body.title
+        console.log(title)
 
         // Validation
         if (!title) {
@@ -17,7 +21,7 @@ exports.createCategory = async (req, res) => {
             });
         }
 
-        const newCategory = new Category({ title });
+        const newCategory = new Category({ title,});
         await newCategory.save();
 
         return res.status(201).json({

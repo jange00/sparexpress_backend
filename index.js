@@ -20,6 +20,9 @@ const specificationRouter = require("./routes/specificationRoutes")
 const subCategoryRoutes = require("./routes/subCategoryRoutes")
 const wishlistRoutes = require("./routes/wishlistRoutes")
 
+// file upload
+const path = require("path")
+
 // Connect to DB
 connectDB()
 
@@ -39,6 +42,8 @@ app.use("/api/shipping-address", shippingAddressRoutes)
 app.use("/api/specifications", specificationRouter)
 app.use("/api/subcategories", subCategoryRoutes)
 app.use("/apt/wishlist", wishlistRoutes)
+// file upload
+app.use("/uploads", express.static(path.join(__dirname,"uploads")))
 
 // Start server
 const PORT = process.env.PORT
