@@ -31,7 +31,7 @@ app.use(express.json())
 
 // implement routes here
 app.use("/api/auth",userRoute)
-app.use("/api/admin/user", adminUserRoute)
+app.use("/api/admin/users", adminUserRoute)
 app.use("/api/products", productRoutes)
 app.use("/api/brands", brandRoutes)
 app.use("/api/categories", categoryRoutes)
