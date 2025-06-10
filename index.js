@@ -4,6 +4,10 @@ const CONNECTION_STRING = process.env.MONGODB_URI
 
 const express = require("express")
 const connectDB = require("./config/db")
+const cors = require("cors")
+let corsOptions = {
+    origin: "*" // can provide list of domain
+}
 const app = express()
 
 // Routes
@@ -28,6 +32,10 @@ connectDB()
 
 // Middlewares
 app.use(express.json())
+// Cors
+app.use(cors(corsOptions))
+
+
 
 // implement routes here
 app.use("/api/auth",userRoute)
@@ -44,6 +52,7 @@ app.use("/api/subcategories", subCategoryRoutes)
 app.use("/apt/wishlist", wishlistRoutes)
 // file upload
 app.use("/uploads", express.static(path.join(__dirname,"uploads")))
+
 
 // Start server
 const PORT = process.env.PORT

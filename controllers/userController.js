@@ -9,7 +9,7 @@ exports.registerUser = async (req, res) => {
 
   try {
     const profilePicture = req.file?.path;
-    console.log(req.file?.path);
+    console.log("PHOTO",req.file?.path);
 
     const existingUser = await User.findOne({
       $or: [{ email: email }, { phoneNumber: phoneNumber }],
@@ -31,6 +31,7 @@ exports.registerUser = async (req, res) => {
       password: hashedPassword,
       profilePicture: profilePicture,
     });
+    console.log("User", newUser)
 
     await newUser.save();
 
