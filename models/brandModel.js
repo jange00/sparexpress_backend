@@ -4,7 +4,8 @@ const brandSchema = new mongoose.Schema(
     {
         title: {
             type: String,
-            required: true
+            required: true,
+            unique: true
         },
         count: {
             type: Number,

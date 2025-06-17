@@ -1,30 +1,21 @@
-const express = require("express")
-const router = express.Router()
-const productController = require("../controllers/productController")
+const express = require("express");
+const productController = require("../controllers/productController");
+const router = express.Router();
+const upload = require("../middlewares/fileUpload");
 
-router.post(
-    "/",
-    productController.createProduct
-)
+// Create product (upload multiple images)
+router.post("/", upload.array("image", 10), productController.createProduct);
 
-router.get(
-    "/",
-    productController.getAllProduct
-)
+// Get all products
+router.get("/", productController.getAllProduct);
 
-router.get(
-    "/:id",
-    productController.getProductById
-)
+// Get product by ID
+router.get("/:id", productController.getProductById);
 
-router.put(
-    "/:id",
-    productController.updateProduct
-)
+// Update product (optionally upload new images)
+router.put("/:id", upload.array("image", 10), productController.updateProduct);
 
-router.delete(
-    "/:id",
-    productController.deleteProduct
-)
+// Delete product
+router.delete("/:id", productController.deleteProduct);
 
-module.exports = router
+module.exports = router;

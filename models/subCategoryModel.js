@@ -13,11 +13,11 @@ const subCategorySchema = new mongoose.Schema(
         },
         description: {
             type: String,
-            required: true
+            required: null
         },
         icon: {
             type: String,
-            require: true
+            required: null
         }
     },
     {

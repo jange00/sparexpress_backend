@@ -33,11 +33,12 @@ const productSchema = new mongoose.Schema({
 
   discount: { type: Number },
 
-  specificationsId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Specification",
-    required: false 
-  }
+  // specificationsId: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Specification",
+  //   required: null 
+  // },
+  
 }, { timestamps: true });
 
 module.exports = mongoose.model("Product", productSchema);
