@@ -38,7 +38,7 @@ exports.authenticateUser = async (req, res, next) => {
 }
 
 exports.isAdmin = async (req, res, next) => {
-    if(req.user && req.user.role === 'admin'){
+    if(req.user && req.user.role === 'Admin'){
         next()
     }else{
         return res.status(403).json(

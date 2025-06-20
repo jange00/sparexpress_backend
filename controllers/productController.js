@@ -14,9 +14,11 @@ exports.createProduct = async (req, res) => {
       stock,
       shippingCharge,
       discount,
-      specificationsId,
+      // specificationsId,
     } = req.body;
 
+
+    console.log(req.body)
     if (!name || !price || !categoryId || !subCategoryId || !brandId || !stock || !shippingCharge) {
       return res.status(400).json({
         success: false,
@@ -43,7 +45,7 @@ exports.createProduct = async (req, res) => {
       stock,
       shippingCharge,
       discount,
-      specificationsId,
+      // specificationsId,
       image: imagePaths
     });
 

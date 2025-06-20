@@ -21,10 +21,10 @@ const ratingsSchema = new mongoose.Schema(
             trim: true,
             required: false
         },
-        images: {
-            type: [String], // Array of image URLs or paths
-            required: false
-        },   
+        // images: {
+        //     type: [String], // Array of image URLs or paths
+        //     required: false
+        // },   
     },
     {
         timestamps: true

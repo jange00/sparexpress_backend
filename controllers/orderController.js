@@ -3,15 +3,18 @@ const Order = require("../models/orderModel");
 
 // Create a new order
 exports.createOrder = async (req, res) => {
+    const {Amount, shippingAddressId, paymentMethodId,  } = req.fields;
+    const items = JSON.parse(req.fields.items);
+    console.log(req.fields)
     try {
-        const {Amount, shippingAddressId, paymentId, items } = req.body;
+        
         const amount = Number(Amount);
         userId=req.user._id;
 
         // Validate required fields
         if (
             !shippingAddressId ||
-            !paymentId ||
+            !paymentMethodId ||
             !items ||
             !Array.isArray(items) ||
             items.length === 0 ||
@@ -27,7 +30,7 @@ exports.createOrder = async (req, res) => {
             userId,
             Amount: amount,
             shippingAddressId,
-            paymentId,
+            paymentMethodId,
             items
         });
 
@@ -54,7 +57,7 @@ exports.getAllOrders = async (req, res) => {
         const orders = await Order.find()
             .populate("userId", "fullname email phoneNumber")
             .populate("shippingAddressId")
-            .populate("paymentId")
+            .populate("paymentMethodId")
             .populate("items.productId", "name price");
 
         return res.status(200).json({
@@ -87,7 +90,7 @@ exports.getOrderById = async (req, res) => {
         const order = await Order.findById(id)
             .populate("userId", "fullname email phoneNumber")
             .populate("shippingAddressId")
-            .populate("paymentId")
+            .populate("paymentMethodId")
             .populate("items.productId", "name price");
 
         if (!order) {

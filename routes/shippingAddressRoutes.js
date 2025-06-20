@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const shippingAddressController = require("../controllers/shippingAddressController")
+const {authenticateUser} = require("../middlewares/authorizedUser")
 
 router.post(
     "/", 
@@ -9,7 +10,13 @@ router.post(
 
 router.get(
     "/",
+    authenticateUser,
     shippingAddressController.getAllShippingAddresses
+)
+router.get(
+    "/users/:userId",
+    authenticateUser,
+    shippingAddressController.getShippingAddressesByUserId
 )
 
 router.get(

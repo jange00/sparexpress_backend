@@ -33,11 +33,11 @@ const productSchema = new mongoose.Schema({
 
   discount: { type: Number },
 
-  // specificationsId: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "Specification",
-  //   required: null 
-  // },
+  specificationsId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Specification",
+    required: null 
+  },
   
 }, { timestamps: true });
 

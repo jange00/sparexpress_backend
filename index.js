@@ -1,9 +1,11 @@
 require('dotenv').config()
+const formidable = require("express-formidable");
 
 const CONNECTION_STRING = process.env.MONGODB_URI
 
 const express = require("express")
 const connectDB = require("./config/db")
+
 const cors = require("cors")
 let corsOptions = {
     origin: "*" // can provide list of domain
@@ -36,7 +38,7 @@ app.use(express.json())
 app.use(cors(corsOptions))
 
 
-
+app.use(formidable());
 // implement routes here
 app.use("/api/auth",userRoute)
 app.use("/api/admin/users", adminUserRoute)

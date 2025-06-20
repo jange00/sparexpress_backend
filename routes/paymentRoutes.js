@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const paymentController = require("../controllers/paymentController")
+const {authenticateUser} = require("../middlewares/authorizedUser")
 
 router.post(
     "/",
@@ -9,6 +10,7 @@ router.post(
 
 router.get(
     "/", 
+    authenticateUser,
     paymentController.getAllPayments
 )
 
@@ -26,5 +28,11 @@ router.delete(
     "/:id",
     paymentController.deletePayment
 )
+
+// New route to get payments by user ID
+router.get(
+    "/users/:userId", 
+    authenticateUser,
+    paymentController.getPaymentsByUserId);
 
 module.exports = router

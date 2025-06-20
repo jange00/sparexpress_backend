@@ -4,7 +4,7 @@ const ShippingAddress = require("../models/shipment_addressModel")
 // Create a new shipping address
 exports.createShippingAddress = async (req, res) => {
     try{
-        const { streetAddress, postalCode, city, district, province, country } = req.body
+        const { streetAddress, postalCode, city, district, province, country} = req.body
         userId=req.user._id;
         if(!streetAddress || !postalCode || !city || !district || !province || !country) {
             return res.status(404).json({
@@ -28,6 +28,7 @@ exports.createShippingAddress = async (req, res) => {
             data : newAddress
         })
     }catch(err){
+        console.log(err)
         return res.status(500).json({
             success : false,
             message : "Failed to create shipping address"
@@ -157,3 +158,40 @@ exports.deleteShippingAddress = async (req, res) => {
         })
     }
 }
+
+// Get shipping addresses by user ID
+exports.getShippingAddressesByUserId = async (req, res) => {
+    try {
+        const {userId }= req.params;
+        console.log(req.params)
+
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid user ID"
+            });
+        }
+
+        const addresses = await ShippingAddress.find({ userId })
+            .populate("userId", "fullname email phoneNumber");
+
+        if (addresses.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No shipping addresses found for this user"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Shipping addresses fetched successfully",
+            data: addresses
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to fetch shipping addresses"
+        });
+    }
+};

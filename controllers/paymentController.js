@@ -181,3 +181,42 @@ exports.deletePayment = async (req, res) => {
         });
     }
 };
+
+
+// Get payments by user ID
+exports.getPaymentsByUserId = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        console.log(req.params)
+
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid user ID"
+            });
+        }
+
+        const payments = await Payment.find({ userId })
+            .populate("userId", "fullname email phoneNumber")
+            .populate("orderId");
+
+        if (!payments.length) {
+            return res.status(404).json({
+                success: false,
+                message: "No payments found for this user"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Payments fetched successfully",
+            data: payments
+        });
+    } catch (err) {
+        console.error("Get payments by user ID error:", err);
+        return res.status(500).json({
+            success: false,
+            message: "Server error while fetching payments by user"
+        });
+    }
+};
