@@ -3,19 +3,20 @@ const Product = require("../models/productModel");
 
 // Create Product
 exports.createProduct = async (req, res) => {
+  const {
+    name,
+    description,
+    price,
+    categoryId,
+    subCategoryId,
+    brandId,
+    stock,
+    shippingCharge,
+    discount,
+    // specificationsId,
+  } = req.body;
   try {
-    const {
-      name,
-      description,
-      price,
-      categoryId,
-      subCategoryId,
-      brandId,
-      stock,
-      shippingCharge,
-      discount,
-      // specificationsId,
-    } = req.body;
+    
 
 
     console.log(req.body)
@@ -73,7 +74,7 @@ exports.getAllProduct = async (req, res) => {
       .populate("categoryId", "title")
       .populate("subCategoryId", "title")
       .populate("brandId", "title")
-      .populate("specificationsId");
+      // .populate("specificationsId");
 
     return res.status(200).json({
       success: true,
@@ -105,7 +106,7 @@ exports.getProductById = async (req, res) => {
       .populate("categoryId", "title")
       .populate("subCategoryId", "title")
       .populate("brandId", "title")
-      .populate("specificationsId");
+      // .populate("specificationsId");
 
     if (!product) {
       return res.status(404).json({

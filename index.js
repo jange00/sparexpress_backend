@@ -33,19 +33,22 @@ const path = require("path")
 connectDB()
 
 // Middlewares
-app.use(express.json())
+// app.use(express.json())
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
 // Cors
 app.use(cors(corsOptions))
 
 
-app.use(formidable());
+// app.use(formidable());
 // implement routes here
 app.use("/api/auth",userRoute)
 app.use("/api/admin/users", adminUserRoute)
 app.use("/api/products", productRoutes)
 app.use("/api/brands", brandRoutes)
 app.use("/api/categories", categoryRoutes)
-app.use("/api/orders", orderRoutes)
+app.use("/api/orders",formidable(), orderRoutes)
 app.use("/api/payments", paymentRoutes)
 app.use("/api/ratings", ratingRoutes)
 app.use("/api/shipping-address", shippingAddressRoutes)

@@ -4,6 +4,7 @@ const router = express.Router();
 const upload = require("../middlewares/fileUpload");
 
 router.post("/register", upload.single("profilePicture"), userController.registerUser);
+
 router.post("/login", userController.loginUser);
 router.get("/users", userController.getAllUsers);
 router.delete("/users/:id", userController.deleteUser);

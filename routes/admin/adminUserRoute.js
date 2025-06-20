@@ -1,13 +1,12 @@
 const express = require("express")
 const router = express.Router()
-
 const {createUser,getUser, getOneUser,updateOneUser, deleteOneUser} = require("../../controllers/admin/userManagementController")
 const { authenticateUser, isAdmin } = require("../../middlewares/authorizedUser")
-
+const upload = require("../../middlewares/fileUpload");
 
 
 router.post(
-    "/create",
+    "/create",upload.single("profilePicture"),
     createUser
 )
 

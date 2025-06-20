@@ -4,11 +4,13 @@ const Order = require("../models/orderModel");
 // Create a new order
 exports.createOrder = async (req, res) => {
     const {Amount, shippingAddressId, paymentMethodId,  } = req.fields;
-    const items = JSON.parse(req.fields.items);
     console.log(req.fields)
+    const items = JSON.parse(req.fields.items);
+    const amount = Number(Amount);
+    
     try {
         
-        const amount = Number(Amount);
+       
         userId=req.user._id;
 
         // Validate required fields

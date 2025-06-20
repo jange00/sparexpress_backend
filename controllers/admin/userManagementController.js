@@ -4,7 +4,8 @@ const bcrypt = require ("bcrypt")
 // CRUD
 // Create 
 exports.createUser = async (req, res) => {
-    const {fullname, email, phoneNumber, password} = req.body
+    const {fullname, email, phoneNumber, password} = req.fields
+    console.log(req.fields)
     // Validation
     if(!fullname || !email || !phoneNumber || !password){
         return res.status(400).json(
