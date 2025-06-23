@@ -4,7 +4,7 @@ const Payment = require("../models/paymentModel");
 // Create a new payment 
 exports.createPayment = async (req, res) => {
     try {
-        const { orderId, amount, paymentMethod, status  } = req.body;
+        const { orderId, amount, paymentMethod, paymentStatus  } = req.body;
         userId=req.user._id;
 
         // Basic validation
@@ -20,7 +20,7 @@ exports.createPayment = async (req, res) => {
             orderId,
             amount: Number(amount),
             paymentMethod,
-            status
+            paymentStatus
         });
 
         await newPayment.save();
@@ -199,6 +199,7 @@ exports.getPaymentsByUserId = async (req, res) => {
         const payments = await Payment.find({ userId })
             .populate("userId", "fullname email phoneNumber")
             .populate("orderId");
+            // console.log(payments);
 
         if (!payments.length) {
             return res.status(404).json({

@@ -1,24 +1,34 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 const brandSchema = new mongoose.Schema(
-    {
-        title: {
-            type: String,
-            required: true,
-            unique: true
-        },
-        count: {
-            type: Number,
-            required: true
-        },
-        // no need to keep model 
-        model: {
-            type: String,
-            required : false
-        }
+  {
+    title: {
+      type: String,
+      required: true,
+      unique: true
     },
-    {
-        timestamps: true // Optional, but good for tracking
+    count: {
+      type: Number,
+      required: true
+    },
+    model: {
+      type: String,
+      required: false
+    },
+    categoryId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true
+    },
+    subcategoryId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Subcategory",
+      required: true
     }
-)
-module.exports = mongoose.model("Brand", brandSchema)
+  },
+  {
+    timestamps: true
+  }
+);
+
+module.exports = mongoose.model("Brand", brandSchema);

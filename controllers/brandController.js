@@ -1,3 +1,5 @@
+// 
+
 const mongoose = require("mongoose");
 const Brand = require("../models/brandModel");
 
@@ -5,20 +7,32 @@ const Brand = require("../models/brandModel");
 exports.createBrand = async (req, res) => {
     try {
         const title = req.body.title?.trim();
+        console.log(req.body)
         const model = req.body.model?.trim();
         const count = Number(req.body.count);
+        const categoryId = req.body.categoryId;
+        const subcategoryId = req.body.subcategoryId;
 
-        if (!title || !model || isNaN(count)) {
+        if (!title || isNaN(count) || !categoryId || !subcategoryId) {
             return res.status(400).json({
                 success: false,
-                message: "All fields (title, count, model) are required and valid"
+                message: "Fields title, count, categoryId, and subcategoryId are required and must be valid."
+            });
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(categoryId) || !mongoose.Types.ObjectId.isValid(subcategoryId)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid categoryId or subcategoryId"
             });
         }
 
         const newBrand = new Brand({
             title,
             count,
-            model
+            model,
+            categoryId,
+            subcategoryId
         });
 
         await newBrand.save();
@@ -41,7 +55,10 @@ exports.createBrand = async (req, res) => {
 // Get all brands
 exports.getAllBrands = async (req, res) => {
     try {
-        const brands = await Brand.find();
+        const brands = await Brand.find()
+            .populate("categoryId", "title")
+            .populate("subcategoryId", "title");
+
         return res.status(200).json({
             success: true,
             message: "Brands fetched successfully",
@@ -68,7 +85,10 @@ exports.getBrandById = async (req, res) => {
             });
         }
 
-        const brand = await Brand.findById(id);
+        const brand = await Brand.findById(id)
+            .populate("categoryId", "title")
+            .populate("subcategoryId", "title");
+
         if (!brand) {
             return res.status(404).json({
                 success: false,
@@ -95,11 +115,26 @@ exports.getBrandById = async (req, res) => {
 exports.updateBrand = async (req, res) => {
     try {
         const { id } = req.params;
+        const { categoryId, subcategoryId } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid brand ID"
+            });
+        }
+
+        if (categoryId && !mongoose.Types.ObjectId.isValid(categoryId)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid categoryId"
+            });
+        }
+
+        if (subcategoryId && !mongoose.Types.ObjectId.isValid(subcategoryId)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid subcategoryId"
             });
         }
 

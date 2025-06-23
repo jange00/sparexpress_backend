@@ -8,7 +8,7 @@ const orderSchema = new mongoose.Schema(
             required: true
         },
         Amount: {
-            type: String,
+            type: Number,
             required: true,
             min: 0
         },
@@ -22,6 +22,13 @@ const orderSchema = new mongoose.Schema(
             ref: "Payment",
             required: true
         },
+        orderStatus: {
+            type: String,
+            trim: true,
+            required: true,
+            enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"],
+            default: "Pending"
+          },
         items: [
             {
                 productId: {

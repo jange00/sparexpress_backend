@@ -29,4 +29,6 @@ router.delete(
     orderController.deleteOrder
 )
 
+router.get("/users/:userId", orderController.getOrdersByUserId)
+
 module.exports = router

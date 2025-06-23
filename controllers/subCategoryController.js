@@ -3,9 +3,9 @@ const Subcategory = require("../models/subCategoryModel");
 
 // Create Subcategory
 exports.createSubCategory = async (req, res) => {
+    const { categoryId, title, description, icon } = req.body;
+    console.log(req.body)
     try {
-        const { categoryId, title, description, icon } = req.body;
-
         if (!categoryId || !title || !description || !icon) {
             return res.status(400).json({
                 success: false,
