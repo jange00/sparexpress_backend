@@ -5,6 +5,7 @@ const {authenticateUser} = require("../middlewares/authorizedUser")
 
 router.post(
     "/", 
+    authenticateUser,
     shippingAddressController.createShippingAddress
 )
 
@@ -17,6 +18,11 @@ router.get(
     "/users/:userId",
     authenticateUser,
     shippingAddressController.getShippingAddressesByUserId
+)
+router.get(
+    "/users",
+    authenticateUser,
+    shippingAddressController.getShippingAddressesByUser
 )
 
 router.get(

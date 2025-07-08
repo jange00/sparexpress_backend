@@ -3,9 +3,11 @@ const ShippingAddress = require("../models/shipment_addressModel")
 
 // Create a new shipping address
 exports.createShippingAddress = async (req, res) => {
+    const { streetAddress, postalCode, city, district, province, country} = req.body
+    userId=req.user._id;
+    console.log(req.body)
     try{
-        const { streetAddress, postalCode, city, district, province, country} = req.body
-        userId=req.user._id;
+
         if(!streetAddress || !postalCode || !city || !district || !province || !country) {
             return res.status(404).json({
                 success : false,
@@ -13,14 +15,21 @@ exports.createShippingAddress = async (req, res) => {
             })
         }
 
-        if(!mongoose.Types.ObjectId.isValid(userId)) {
-            return res.status(404).json({
-                success : false,
-                message : "Invalid user ID"
-            })
-        }
+        // if(!mongoose.Types.ObjectId.isValid(userId)) {
+        //     return res.status(404).json({
+        //         success : false,
+        //         message : "Invalid user ID"
+        //     })
+        // }
 
-        const newAddress = new ShippingAddress(req.body)
+        const newAddress = new ShippingAddress({
+            streetAddress,
+            postalCode,
+            city,
+            district,
+            province,country,
+            userId
+        })
         await newAddress.save()
         return res.status(201).json({
             success : true,
@@ -195,3 +204,43 @@ exports.getShippingAddressesByUserId = async (req, res) => {
         });
     }
 };
+
+exports.getShippingAddressesByUser = async (req, res) => {
+    const userId=req.user._id;
+       
+    try {
+        
+
+        if (!mongoose.Types.ObjectId.isValid(
+            userId)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid user ID"
+            });
+        }
+
+        const addresses = await ShippingAddress.find({ 
+            userId })
+            .populate("userId", "fullname email phoneNumber");
+
+        if (addresses.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No shipping addresses found for this user"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Shipping addresses fetched successfully",
+            data: addresses
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to fetch shipping addresses"
+        });
+    }
+};
+
