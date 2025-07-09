@@ -40,7 +40,7 @@ exports.registerUser = async (req, res) => {
       msg: "User registered successfully",
     });
   } catch (e) {
-    console.error("Error in registerUser:", e);
+    // console.error("Error in registerUser:", e);
     return res.status(500).json({
       success: false,
       msg: "Server error",
@@ -95,7 +95,7 @@ exports.loginUser = async (req, res) => {
       token: token,
     });
   } catch (err) {
-    console.error("Error in loginUser:", err);
+    // console.error("Error in loginUser:", err);
     return res.status(500).json({
       success: false,
       message: "Server error",
@@ -103,7 +103,7 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-// ✅ Get all users
+// Get all users
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password");
@@ -112,7 +112,7 @@ exports.getAllUsers = async (req, res) => {
       data: users,
     });
   } catch (err) {
-    console.error("Error in getAllUsers:", err);
+    // console.error("Error in getAllUsers:", err);
     return res.status(500).json({
       success: false,
       message: "Server error",
@@ -120,7 +120,7 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-// ✅ Delete user by ID
+// Delete user by ID
 exports.deleteUser = async (req, res) => {
   const userId = req.params.id;
 
@@ -138,7 +138,7 @@ exports.deleteUser = async (req, res) => {
       message: "User deleted successfully",
     });
   } catch (err) {
-    console.error("Error in deleteUser:", err);
+    // console.error("Error in deleteUser:", err);
     return res.status(500).json({
       success: false,
       message: "Server error",
@@ -146,7 +146,7 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
-// ✅ Update user by ID
+// Update user by ID
 exports.updateUser = async (req, res) => {
   const userId = req.params.id;
   const { fullname, email, phoneNumber } = req.body;
@@ -177,7 +177,35 @@ exports.updateUser = async (req, res) => {
       data: updatedUser,
     });
   } catch (err) {
-    console.error("Error in updateUser:", err);
+    // console.error("Error in updateUser:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+
+// Get user by ID
+exports.getUserById = async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const user = await User.findById(userId).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (err) {
+    // console.error("Error in getUserById:", err);
     return res.status(500).json({
       success: false,
       message: "Server error",

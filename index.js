@@ -25,6 +25,7 @@ const shippingAddressRoutes = require("./routes/shippingAddressRoutes")
 const specificationRouter = require("./routes/specificationRoutes")
 const subCategoryRoutes = require("./routes/subCategoryRoutes")
 const wishlistRoutes = require("./routes/wishlistRoutes")
+const chatbotRoutes = require('./routes/chatbotRoutes')
 
 // file upload
 const path = require("path")
@@ -54,7 +55,8 @@ app.use("/api/ratings", ratingRoutes)
 app.use("/api/shipping-address", shippingAddressRoutes)
 app.use("/api/specifications", specificationRouter)
 app.use("/api/admin/subcategories", subCategoryRoutes)
-app.use("/apt/wishlist", wishlistRoutes)
+app.use("/api/wishlist", wishlistRoutes)
+app.use('/api/chat-bot' ,chatbotRoutes)
 // file upload
 app.use("/uploads", express.static(path.join(__dirname,"uploads")))
 

@@ -5,7 +5,7 @@ const bcrypt = require ("bcrypt")
 // Create 
 exports.createUser = async (req, res) => {
     const {fullname, email, phoneNumber, password} = req.fields
-    console.log(req.fields)
+    // console.log(req.fields)
     // Validation
     if(!fullname || !email || !phoneNumber || !password){
         return res.status(400).json(
@@ -80,6 +80,7 @@ exports.getUser = async (req, res) => {
 exports.getOneUser = async (req, res) => {
     try{
         const _id = req.params.id // use mongo id
+        // console.log(_id)
         const user = await User.findById(_id)
         return res.status(200).json(
             {
