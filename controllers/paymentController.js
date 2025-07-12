@@ -5,7 +5,7 @@ const Payment = require("../models/paymentModel");
 exports.createPayment = async (req, res) => {
     try {
         const { orderId, amount, paymentMethod, paymentStatus  } = req.body;
-        userId=req.user._id;
+        const userId=req.user._id;
 
         // Basic validation
         if ( !orderId || !amount || !paymentMethod || isNaN(Number(amount))) {

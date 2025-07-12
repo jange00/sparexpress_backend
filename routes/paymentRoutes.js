@@ -5,6 +5,7 @@ const {authenticateUser} = require("../middlewares/authorizedUser")
 
 router.post(
     "/",
+    authenticateUser,
     paymentController.createPayment
 )
 

@@ -10,4 +10,12 @@ router.get("/users", userController.getAllUsers);
 router.get("/users/:id", userController.getUserById);
 router.delete("/users/:id", userController.deleteUser);
 router.put("/users/:id", upload.single("profilePicture"),userController.updateUser);
+
+
+
+// forgot password
+router.post("/request-reset", userController.sendResetLink);
+router.post("/reset-password/:token", userController.resetPassword);
+
 module.exports = router;
+

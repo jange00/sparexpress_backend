@@ -2,6 +2,8 @@ const User = require("../models/userModel");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
+const nodemailer = require('nodemailer')
+
 // Register Controller
 exports.registerUser = async (req, res) => {
   const { fullname, email, password, phoneNumber } = req.body;
@@ -210,5 +212,88 @@ exports.getUserById = async (req, res) => {
       success: false,
       message: "Server error",
     });
+  }
+};
+
+
+
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+// forget password
+exports.sendResetLink = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const token = jwt.sign({ id: user._id }, process.env.SECRET, {
+      expiresIn: "15m",
+    });
+    const resetUrl = `${process.env.CLIENT_URL}/reset-password/${token}`;
+
+    // const mailOptions = {
+    //   from: `"Your App" <${process.env.EMAIL_USER}>`,
+    //   to: email,
+    //   subject: "Reset your password",
+    //   html: `<p>Click <a href="${resetUrl}">here</a> to reset your password.</p>`,
+    // };
+
+    const mailOptions = {
+      from: `"SpareXpress Support" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "🔐 Reset Your SpareXpress Password",
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333;">
+          <p>Hi there,</p>
+          <p>You recently requested to reset your SpareXpress account password.</p>
+          <p>
+            Click 
+            <a href="${resetUrl}" style="color: #eab308; font-weight: bold; text-decoration: none;">
+              here
+            </a> 
+            to reset your password.
+          </p>
+          <p>If you did not request a password reset, please ignore this email.</p>
+          <br/>
+          <p>🚗 Regards,<br/><strong>SpareXpress Team</strong></p>
+        </div>
+      `,
+    };
+    
+
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err)
+        return res
+          .status(500)
+          .json({ success: false, message: "Error sending email" });
+      console.log("Email sent: " + info.response);
+      res.status(200).json({ success: true, message: "Reset email sent" });
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET);
+    const hashed = await bcrypt.hash(password, 10);
+    await User.findByIdAndUpdate(decoded.id, { password: hashed });
+
+    res.status(200).json({ success: true, message: "Password updated" });
+  } catch (err) {
+    res
+      .status(400)
+      .json({ success: false, message: "Invalid or expired token" });
   }
 };
