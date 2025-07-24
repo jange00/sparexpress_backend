@@ -297,3 +297,28 @@ exports.resetPassword = async (req, res) => {
       .json({ success: false, message: "Invalid or expired token" });
   }
 };
+
+// Get currently authenticated user
+exports.getMe = async (req, res) => {
+  try {
+    // req.user should be set by authentication middleware
+    const user = await User.findById(req.user._id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};

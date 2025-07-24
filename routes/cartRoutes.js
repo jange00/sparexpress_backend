@@ -15,4 +15,6 @@ router.delete("/item/:cartItemId", cartController.removeFromCart);
 // Clear all items in the cart for a specific user
 router.delete("/clear/:userId", cartController.clearCart);
 
+router.put('/item/:cartItemId', cartController.updateCartItem);
+
 module.exports = router;
