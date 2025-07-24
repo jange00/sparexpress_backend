@@ -27,6 +27,7 @@ const subCategoryRoutes = require("./routes/subCategoryRoutes")
 const wishlistRoutes = require("./routes/wishlistRoutes")
 const chatbotRoutes = require('./routes/chatbotRoutes')
 const cartRoutes = require('./routes/cartRoutes')
+const deliveryRoutes = require("./routes/deliveryRoutes");
 // const esewaRoutes = require('./routes/esewaRoutes')
 
 // file upload
@@ -60,6 +61,7 @@ app.use("/api/admin/subcategories", subCategoryRoutes)
 app.use("/api/wishlist", wishlistRoutes)
 app.use('/api/chat-bot' ,chatbotRoutes)
 app.use('/api/cart' ,cartRoutes)
+app.use("/api/deliveries", deliveryRoutes);
 // app.use("/api/esewa",esewaRoutes)
 // file upload
 app.use("/uploads", express.static(path.join(__dirname,"uploads")))
