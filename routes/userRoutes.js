@@ -2,6 +2,7 @@ const express = require("express");
 const userController = require("../controllers/userController");
 const router = express.Router();
 const upload = require("../middlewares/fileUpload");
+// const { authenticateUser, isAdmin} = require('../middlewares/authorizedUser')
 const { authenticateUser, isAdmin } = require("../middlewares/authorizedUser");
 
 
