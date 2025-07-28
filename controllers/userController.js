@@ -29,6 +29,7 @@ exports.registerUser = async (req, res) => {
     const newUser = new User({
       fullname,
       email,
+      // email: email.toLowerCase(),
       phoneNumber,
       password: hashedPassword,
       profilePicture: profilePicture,
@@ -64,6 +65,7 @@ exports.loginUser = async (req, res) => {
   try {
     const getUser = await User.findOne({
       $or: [{ email: identifier }, { phoneNumber: identifier }],
+      // $or: [{ email: identifier.toLowerCase() }, { phoneNumber: identifier }],
     });
 
     if (!getUser) {

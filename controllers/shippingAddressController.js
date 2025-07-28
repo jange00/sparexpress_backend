@@ -5,6 +5,7 @@ const ShippingAddress = require("../models/shipment_addressModel")
 exports.createShippingAddress = async (req, res) => {
     const { streetAddress, postalCode, city, district, province, country} = req.body
     userId=req.user._id;
+    // const userId = req.body.userId || req.user._id;
     console.log(req.body)
     try{
 
